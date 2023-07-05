@@ -1,9 +1,9 @@
-repo_name = "TheBloke/airoboros-65B-gpt4-1.4-GPTQ"
-model_name = "airoboros-65B-gpt4-1.4-GPTQ"
-model_basename = "airoboros-65b-gpt4-1.4-GPTQ-4bit--1g.act.order"
+repo_name = "TheBloke/WizardLM-33B-V1.0-Uncensored-GPTQ"
+model_name = "WizardLM-33B-V1.0-Uncensored-GPTQ"
+model_basename = "wizardlm-33b-v1.0-uncensored-GPTQ-4bit--1g.act.order.safetensors"
 max_new_tokens = 1000
 token_repetition_penalty_max = 1.176470
 temperature = 0.1
 top_p = 0.1
 top_k = 40
-stop_sequences = ["User:", "Reference(s):"]
+stop_sequences = ["###"]
