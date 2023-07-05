@@ -36,7 +36,7 @@ class Predictor:
         print("Creating generator...")
         self.generator = ExLlamaGenerator(self.model, self.tokenizer, self.cache)   # create generator
         # Configure generator
-        self.generator.disallow_tokens([self.tokenizer.eos_token_id])
+        # self.generator.disallow_tokens([self.tokenizer.eos_token_id])
 
         self.generator.settings.token_repetition_penalty_max = token_repetition_penalty_max
         self.generator.settings.temperature = temperature
