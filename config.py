@@ -1,6 +1,6 @@
-repo_name = "TheBloke/WizardLM-33B-V1.0-Uncensored-GPTQ"
-model_name = "WizardLM-33B-V1.0-Uncensored-GPTQ"
-model_basename = "wizardlm-33b-v1.0-uncensored-GPTQ-4bit--1g.act.order.safetensors"
+repo_name = "TheBloke/llama-2-70b-Guanaco-QLoRA-GPTQ"
+model_name = "llama-2-70b-Guanaco-QLoRA-GPTQ"
+model_basename = "gptq_model-4bit-128g.safetensors"
 max_new_tokens = 2048
 token_repetition_penalty_max = 1.15
 temperature = 1.99
