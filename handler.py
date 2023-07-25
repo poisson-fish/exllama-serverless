@@ -27,7 +27,7 @@ def run(job):
     validated_input = validated_input['validated_input']
     
     result = MODEL.predict(
-        inference_settings = validated_input["prompt"]
+        settings = validated_input
     )
 
     job_output = {
