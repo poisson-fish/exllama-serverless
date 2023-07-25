@@ -1,5 +1,5 @@
 import torch
-from config import repo_name, model_name, model_basename, max_new_tokens, token_repetition_penalty_max, temperature, top_p, top_k, stop_sequences
+from config import repo_name, model_name, model_basename
 from huggingface_hub import snapshot_download
 import logging, os, glob
 from exllama.model import ExLlama, ExLlamaCache, ExLlamaConfig
@@ -10,7 +10,7 @@ from schema import InferenceSettings
 class Predictor:
     def setup(self):
         # Model moved to network storage
-        model_directory = f"/runpod-volume/{model_name}"  
+        model_directory = f"{model_name}"  
                    
         # snapshot_download(repo_id=repo_name, local_dir=model_directory)
         tokenizer_path = os.path.join(model_directory, "tokenizer.model")
@@ -40,10 +40,13 @@ class Predictor:
         # self.generator.disallow_tokens([self.tokenizer.eos_token_id])
         self.inference_settings = InferenceSettings()
         
-        self.generator.settings.token_repetition_penalty_max = token_repetition_penalty_max
-        self.generator.settings.temperature = temperature
-        self.generator.settings.top_p = top_p
-        self.generator.settings.top_k = top_k
+        self.generator.settings.token_repetition_penalty_max = self.inference_settings.token_repetition_penalty
+        self.generator.settings.temperature = self.inference_settings.temperature
+        self.generator.settings.top_p = self.inference_settings.top_p
+        self.generator.settings.typical = self.inference_settings.typical_p
+        self.generator.settings.top_k = self.inference_settings.top_k
+        self.generator.settings.beams = self.inference_settings.num_beams
+        self.generator.settings.beam_length = self.inference_settings.length_penalty
         
     def predict(self, settings):
         
@@ -54,14 +57,17 @@ class Predictor:
         self.generator.end_beam_search()
 
         # Update generator settings
-        inference_settings = InferenceSettings(**settings)
+        self.inference_settings = InferenceSettings(**settings)
         
-        self.generator.settings.token_repetition_penalty_max = inference_settings.token_repetition_penalty
-        self.generator.settings.temperature = inference_settings.temperature
-        self.generator.settings.top_p = inference_settings.top_p
-        self.generator.settings.top_k = inference_settings.top_k
+        self.generator.settings.token_repetition_penalty_max = self.inference_settings.token_repetition_penalty
+        self.generator.settings.temperature = self.inference_settings.temperature
+        self.generator.settings.top_p = self.inference_settings.top_p
+        self.generator.settings.typical = self.inference_settings.typical_p
+        self.generator.settings.top_k = self.inference_settings.top_k
+        self.generator.settings.beams = self.inference_settings.num_beams
+        self.generator.settings.beam_length = self.inference_settings.length_penalty
         
-        ids = self.tokenizer.encode(inference_settings.prompt)
+        ids = self.tokenizer.encode(self.inference_settings.prompt)
         num_res_tokens = ids.shape[-1]  # Decode from here
         self.generator.gen_begin(ids)
         
@@ -69,15 +75,15 @@ class Predictor:
         new_text = ""
         
         self.generator.begin_beam_search()
-        for i in range(inference_settings.max_new_tokens):
+        for i in range(self.inference_settings.max_new_tokens):
             gen_token = self.generator.beam_search()
             if gen_token.item() == self.tokenizer.eos_token_id:
                 return new_text
 
             num_res_tokens += 1
             text = self.tokenizer.decode(self.generator.sequence_actual[:, -num_res_tokens:][0])
-            new_text = text[len(inference_settings.prompt):]
-            for sequence in stop_sequences:
+            new_text = text[len(self.inference_settings.prompt):]
+            for sequence in self.inference_settings.reverse_prompt:
                 if new_text.lower().endswith(sequence.lower()):
                     return new_text[:-len(sequence)]
 

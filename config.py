@@ -1,9 +1,3 @@
 repo_name = "TheBloke/FreeWilly2-GPTQ"
 model_name = "FreeWilly2-GPTQ"
 model_basename = "gptq_model-4bit-32g.safetensors"
-max_new_tokens = 2048
-token_repetition_penalty_max = 1.15
-temperature = 1.99
-top_p = 0.18
-top_k = 30
-stop_sequences = ["###"]
