@@ -1,6 +1,6 @@
-repo_name = "TheBloke/llama-2-70b-Guanaco-QLoRA-GPTQ"
-model_name = "llama-2-70b-Guanaco-QLoRA-GPTQ"
-model_basename = "gptq_model-4bit-128g.safetensors"
+repo_name = "TheBloke/FreeWilly2-GPTQ"
+model_name = "FreeWilly2-GPTQ"
+model_basename = "gptq_model-4bit-32g.safetensors"
 max_new_tokens = 2048
 token_repetition_penalty_max = 1.15
 temperature = 1.99
