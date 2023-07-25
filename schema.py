@@ -36,41 +36,51 @@ INPUT_SCHEMA = {
     'reverse_prompt': {
         'type': list,
         'required': False,
+        'default': ["###"]
     },
     'temperature': {
         'type': float,
         'required': False,
+        'default': 1.31
     },
     'top_p': {
         'type': float,
         'required': False,
+        'default': 0.14
     },
     'top_k': {
         'type': int,
         'required': False,
+        'default': 49
     },
     'typical_p': {
         'type': float,
         'required': False,
+        'default': 1.0
     },
     'max_new_tokens': {
         'type': int,
         'required': False,
+        'default': 1024
     },
     'token_repetition_penalty': {
         'type': float,
         'required': False,
+        'default': 1.17
     },
     'tail_free_sampling': {
         'type': float,
         'required': False,
+        'default': 1.0
     },
     'num_beams': {
         'type': int,
         'required': False,
+        'default': 1
     },
     'length_penalty': {
         'type': float,
         'required': False,
+        'default': 1.0
     }
 }
