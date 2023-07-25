@@ -4,10 +4,6 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN mkdir data
 WORKDIR /data
 
-# Fetch the model
-# RUN git clone --progress https://huggingface.co/TheBloke/guanaco-65B-GPTQ
-# model is now fetched by worker
-
 # Install Python dependencies (Worker Template)
 RUN pip install --upgrade pip && \
     pip install safetensors==0.3.1 sentencepiece ninja huggingface_hub runpod numpy

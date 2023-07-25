@@ -5,6 +5,7 @@ import logging, os, glob
 from exllama.model import ExLlama, ExLlamaCache, ExLlamaConfig
 from exllama.tokenizer import ExLlamaTokenizer
 from exllama.generator import ExLlamaGenerator
+from schema import InferenceSettings
 
 class Predictor:
     def setup(self):
@@ -37,21 +38,30 @@ class Predictor:
         self.generator = ExLlamaGenerator(self.model, self.tokenizer, self.cache)   # create generator
         # Configure generator
         # self.generator.disallow_tokens([self.tokenizer.eos_token_id])
-
+        self.inference_settings = InferenceSettings()
+        
         self.generator.settings.token_repetition_penalty_max = token_repetition_penalty_max
         self.generator.settings.temperature = temperature
         self.generator.settings.top_p = top_p
         self.generator.settings.top_k = top_k
         
-    def predict(self, prompt):
+    def predict(self, settings):
         
-        return self.generate_to_eos(prompt)
+        return self.generate_to_eos(settings)
     
-    def generate_to_eos(self, prompt):
+    def generate_to_eos(self, settings):
         
         self.generator.end_beam_search()
 
-        ids = self.tokenizer.encode(prompt)
+        # Update generator settings
+        inference_settings = InferenceSettings(**settings)
+        
+        self.generator.settings.token_repetition_penalty_max = inference_settings.token_repetition_penalty
+        self.generator.settings.temperature = inference_settings.temperature
+        self.generator.settings.top_p = inference_settings.top_p
+        self.generator.settings.top_k = inference_settings.top_k
+        
+        ids = self.tokenizer.encode(inference_settings.prompt)
         num_res_tokens = ids.shape[-1]  # Decode from here
         self.generator.gen_begin(ids)
         
@@ -59,14 +69,14 @@ class Predictor:
         new_text = ""
         
         self.generator.begin_beam_search()
-        for i in range(max_new_tokens):
+        for i in range(inference_settings.max_new_tokens):
             gen_token = self.generator.beam_search()
             if gen_token.item() == self.tokenizer.eos_token_id:
                 return new_text
 
             num_res_tokens += 1
             text = self.tokenizer.decode(self.generator.sequence_actual[:, -num_res_tokens:][0])
-            new_text = text[len(prompt):]
+            new_text = text[len(inference_settings.prompt):]
             for sequence in stop_sequences:
                 if new_text.lower().endswith(sequence.lower()):
                     return new_text[:-len(sequence)]

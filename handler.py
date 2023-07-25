@@ -25,9 +25,9 @@ def run(job):
     if 'errors' in validated_input:
         return {"error": validated_input['errors']}
     validated_input = validated_input['validated_input']
-
+    
     result = MODEL.predict(
-        prompt=validated_input["prompt"]
+        inference_settings = validated_input["prompt"]
     )
 
     job_output = {
