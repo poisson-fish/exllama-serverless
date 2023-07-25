@@ -10,7 +10,7 @@ from schema import InferenceSettings
 class Predictor:
     def setup(self):
         # Model moved to network storage
-        model_directory = f"{model_name}"  
+        model_directory = f"/runpod-volume/{model_name}"  
                    
         # snapshot_download(repo_id=repo_name, local_dir=model_directory)
         tokenizer_path = os.path.join(model_directory, "tokenizer.model")
