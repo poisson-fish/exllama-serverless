@@ -32,4 +32,4 @@ class Predictor:
         return self.generate_to_eos(settings["prompt"])
     
     def generate_to_eos(self, prompt):
-        return self.llm.generate(prompt, self.sampling_params)
+        return self.llm.generate(prompt, self.sampling_params)[0].text
