@@ -6,10 +6,10 @@ class InferenceSettings:
         self.stop = ['###']
         self.ignore_eos = False
         self.temperature = 1.31
-        self.early_stopping = True
+        self.early_stopping = False
         self.top_p = 0.14
         self.top_k = 49
-        self.use_beam_search = True
+        self.use_beam_search = False
         self.max_tokens = 1024
         self.presence_penalty = 0.0
         self.frequency_penalty = 0.0
@@ -59,7 +59,7 @@ INPUT_SCHEMA = {
     'early_stopping': {
         'type': bool,
         'required': False,
-        'default': True
+        'default': False
     },
     'top_p': {
         'type': float,
