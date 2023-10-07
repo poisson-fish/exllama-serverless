@@ -8,8 +8,8 @@ from schema import InferenceSettings
 class Predictor:
     def setup(self):
         # Model moved to network storage
-        # model_directory = f"/runpod-volume/{model_name}"  
-        model_directory = f"./models/{model_name}"
+        model_directory = f"/runpod-volume/{model_name}"  
+        # model_directory = f"./models/{model_name}"
         print("Loading model...")
         self.llm = LLM(model=model_directory)
         self.sampling_params = SamplingParams(temperature=0.8, top_p=0.95)    
