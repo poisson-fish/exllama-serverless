@@ -74,7 +74,7 @@ INPUT_SCHEMA = {
     'use_beam_search': {
         'type': bool,
         'required': False,
-        'default': True
+        'default': False
     },
     'max_tokens': {
         'type': int,
