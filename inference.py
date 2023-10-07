@@ -29,7 +29,7 @@ class Predictor:
                                               ignore_eos=settings["ignore_eos"],
                                               max_tokens=settings["max_tokens"]
                                               ) 
-        return self.generate_to_eos(settings.prompt)
+        return self.generate_to_eos(settings["prompt"])
     
     def generate_to_eos(self, prompt):
         return self.llm.generate(prompt, self.sampling_params)
