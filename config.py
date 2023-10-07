@@ -1,3 +1,2 @@
-repo_name = "TheBloke/ORCA_LLaMA_70B_QLoRA-GPTQ"
-model_name = "ORCA_LLaMA_70B_QLoRA-GPTQ"
-model_basename = "gptq_model-4bit-32g.safetensors"
+repo_name = "TheBloke/Mistral-7B-OpenOrca-AWQ"
+model_name = "Mistral-7B-OpenOrca-AWQ"

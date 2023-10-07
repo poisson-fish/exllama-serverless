@@ -2,15 +2,17 @@ class InferenceSettings:
     def __init__(self, **kwargs):
         # Set the default values for all settings
         self.prompt = "output EOS token"
-        self.reverse_prompt = ['###']
+        self.n = 1
+        self.stop = ['###']
+        self.ignore_eos = False
         self.temperature = 1.31
+        self.early_stopping = True
         self.top_p = 0.14
         self.top_k = 49
-        self.typical_p = 1.0
-        self.max_new_tokens = 1024
-        self.token_repetition_penalty = 1.17
-        self.tail_free_sampling = 1.0
-        self.num_beams = 1
+        self.max_tokens = 1024
+        self.presence_penalty = 0
+        self.frequency_penalty = 0
+        self.best_of = 1
         self.length_penalty = 1.0
 
         # Overwrite the default values with any provided in kwargs

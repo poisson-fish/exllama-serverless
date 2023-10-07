@@ -1,90 +1,35 @@
 import torch
-from config import repo_name, model_name, model_basename
+from config import repo_name, model_name
 from huggingface_hub import snapshot_download
 import logging, os, glob
-from exllama.model import ExLlama, ExLlamaCache, ExLlamaConfig
-from exllama.tokenizer import ExLlamaTokenizer
-from exllama.generator import ExLlamaGenerator
+from vllm import LLM, SamplingParams
 from schema import InferenceSettings
 
 class Predictor:
     def setup(self):
         # Model moved to network storage
-        model_directory = f"/runpod-volume/{model_name}"  
-                   
-        # snapshot_download(repo_id=repo_name, local_dir=model_directory)
-        tokenizer_path = os.path.join(model_directory, "tokenizer.model")
-        model_config_path = os.path.join(model_directory, "config.json")
-        st_pattern = os.path.join(model_directory, "*.safetensors")
-        model_path = glob.glob(st_pattern)[0]
-        
-        config = ExLlamaConfig(model_config_path)               # create config from config.json
-        config.model_path = model_path                          # supply path to model weights file
-        
-        
-        """Load the model into memory to make running multiple predictions efficient"""
-        print("Loading tokenizer...")
-        
-        self.tokenizer = ExLlamaTokenizer(tokenizer_path)            # create tokenizer from tokenizer model file
-        
+        # model_directory = f"/runpod-volume/{model_name}"  
+        model_directory = f"./models/{model_name}"
         print("Loading model...")
-        
-        self.model = ExLlama(config)                                 # create ExLlama instance and load the weights
-        
-        print("Creating cache...")
-        self.cache = ExLlamaCache(self.model)                             # create cache for inference
-        
-        print("Creating generator...")
-        self.generator = ExLlamaGenerator(self.model, self.tokenizer, self.cache)   # create generator
-        # Configure generator
-        # self.generator.disallow_tokens([self.tokenizer.eos_token_id])
-        self.inference_settings = InferenceSettings()
-        
-        self.generator.settings.token_repetition_penalty_max = self.inference_settings.token_repetition_penalty
-        self.generator.settings.temperature = self.inference_settings.temperature
-        self.generator.settings.top_p = self.inference_settings.top_p
-        self.generator.settings.typical = self.inference_settings.typical_p
-        self.generator.settings.top_k = self.inference_settings.top_k
-        self.generator.settings.beams = self.inference_settings.num_beams
-        self.generator.settings.beam_length = self.inference_settings.length_penalty
-        
+        self.llm = LLM(model=model_directory)
+        self.sampling_params = SamplingParams(temperature=0.8, top_p=0.95)    
+
     def predict(self, settings):
-        
-        return self.generate_to_eos(settings)
+        self.sampling_params = SamplingParams(temperature=settings.temperature, 
+                                              top_p=settings.top_p,
+                                              top_k=settings.top_k,
+                                              early_stopping=settings.early_stopping,
+                                              n=settings.n,
+                                              best_of=settings.best_of,
+                                              presence_penalty=settings.presence_penalty,
+                                              frequency_penalty=settings.frequency_penalty,
+                                              use_beam_search=settings.use_beam_search,
+                                              length_penalty=settings.length_penalty,
+                                              stop=settings.stop,
+                                              ignore_eos=settings.ignore_eos,
+                                              max_tokens=settings.max_tokens
+                                              ) 
+        return self.generate_to_eos(settings.prompt)
     
-    def generate_to_eos(self, settings):
-        
-        self.generator.end_beam_search()
-
-        # Update generator settings
-        self.inference_settings = InferenceSettings(**settings)
-        
-        self.generator.settings.token_repetition_penalty_max = self.inference_settings.token_repetition_penalty
-        self.generator.settings.temperature = self.inference_settings.temperature
-        self.generator.settings.top_p = self.inference_settings.top_p
-        self.generator.settings.typical = self.inference_settings.typical_p
-        self.generator.settings.top_k = self.inference_settings.top_k
-        self.generator.settings.beams = self.inference_settings.num_beams
-        self.generator.settings.beam_length = self.inference_settings.length_penalty
-        
-        ids = self.tokenizer.encode(self.inference_settings.prompt)
-        num_res_tokens = ids.shape[-1]  # Decode from here
-        self.generator.gen_begin(ids)
-        
-        text = ""
-        new_text = ""
-        
-        self.generator.begin_beam_search()
-        for i in range(self.inference_settings.max_new_tokens):
-            gen_token = self.generator.beam_search()
-            if gen_token.item() == self.tokenizer.eos_token_id:
-                return new_text
-
-            num_res_tokens += 1
-            text = self.tokenizer.decode(self.generator.sequence_actual[:, -num_res_tokens:][0])
-            new_text = text[len(self.inference_settings.prompt):]
-            for sequence in self.inference_settings.reverse_prompt:
-                if new_text.lower().endswith(sequence.lower()):
-                    return new_text[:-len(sequence)]
-
-        return new_text
+    def generate_to_eos(self, prompt):
+        return self.llm.generate(prompt, self.sampling_params)
