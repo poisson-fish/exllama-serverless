@@ -5,7 +5,7 @@ RUN mkdir data
 WORKDIR /data
 
 # Install Python dependencies (Worker Template)
-RUN pip install vllm
+RUN pip install vllm runpod
 
 COPY handler.py /data/handler.py
 COPY schema.py /data/schema.py
