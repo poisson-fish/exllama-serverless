@@ -1,2 +1,2 @@
-repo_name = "TheBloke/Mistral-7B-OpenOrca-AWQ"
-model_name = "Mistral-7B-OpenOrca-AWQ"
+repo_name = "TheBloke/Marcoroni-70B-v1-AWQ"
+model_name = "Marcoroni-70B-v1-AWQ"
