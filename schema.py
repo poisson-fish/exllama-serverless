@@ -9,9 +9,10 @@ class InferenceSettings:
         self.early_stopping = True
         self.top_p = 0.14
         self.top_k = 49
+        self.use_beam_search = True
         self.max_tokens = 1024
-        self.presence_penalty = 0
-        self.frequency_penalty = 0
+        self.presence_penalty = 0.0
+        self.frequency_penalty = 0.0
         self.best_of = 1
         self.length_penalty = 1.0
 
@@ -35,15 +36,30 @@ INPUT_SCHEMA = {
         'type': str,
         'required': True,
     },
-    'reverse_prompt': {
+    'n': {
+        'type': int,
+        'required': False,
+        'default': 1
+    },
+    'stop': {
         'type': list,
         'required': False,
         'default': ["###"]
+    },
+    'ignore_eos': {
+        'type': bool,
+        'required': False,
+        'default': False
     },
     'temperature': {
         'type': float,
         'required': False,
         'default': 1.31
+    },
+    'early_stopping': {
+        'type': bool,
+        'required': False,
+        'default': True
     },
     'top_p': {
         'type': float,
@@ -55,27 +71,27 @@ INPUT_SCHEMA = {
         'required': False,
         'default': 49
     },
-    'typical_p': {
-        'type': float,
+    'use_beam_search': {
+        'type': bool,
         'required': False,
-        'default': 1.0
+        'default': True
     },
-    'max_new_tokens': {
+    'max_tokens': {
         'type': int,
         'required': False,
         'default': 1024
     },
-    'token_repetition_penalty': {
+    'presence_penalty': {
         'type': float,
         'required': False,
-        'default': 1.17
+        'default': 0.0
     },
-    'tail_free_sampling': {
+    'frequency_penalty': {
         'type': float,
         'required': False,
-        'default': 1.0
+        'default': 0.0
     },
-    'num_beams': {
+    'best_of': {
         'type': int,
         'required': False,
         'default': 1
@@ -84,5 +100,6 @@ INPUT_SCHEMA = {
         'type': float,
         'required': False,
         'default': 1.0
-    }
+    },
+    
 }
