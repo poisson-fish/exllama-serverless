@@ -1,2 +1,2 @@
-repo_name = "TheBloke/Xwin-LM-70B-V0.1-AWQ"
-model_name = "Xwin-LM-70B-V0.1-AWQ"
+repo_name = "TheBloke/Marcoroni-70B-v1-AWQ"
+model_name = "Marcoroni-70B-v1-AWQ"
