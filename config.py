@@ -1,2 +1,2 @@
-repo_name = "TheBloke/Marcoroni-70B-v1-AWQ"
-model_name = "Marcoroni-70B-v1-AWQ"
+repo_name = "TheBloke/speechless-codellama-34b-v2.0-AWQ"
+model_name = "speechless-codellama-34b-v2.0-AWQ"
