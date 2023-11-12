@@ -1,2 +1,2 @@
-repo_name = "TheBloke/speechless-codellama-34b-v2.0-AWQ"
-model_name = "speechless-codellama-34b-v2.0-AWQ"
+repo_name = "TheBloke/dolphin-2.2-70B-AWQ"
+model_name = "dolphin-2.2-70B-AWQ"
