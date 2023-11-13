@@ -11,7 +11,7 @@ class Predictor:
         model_directory = f"/runpod-volume/{model_name}"  
         # model_directory = f"./models/{model_name}"
         print("Loading model...")
-        self.llm = LLM(model=model_directory, gpu_memory_utilization=1.0, quantization='awq')
+        self.llm = LLM(model=model_directory, gpu_memory_utilization=0.45, quantization='awq', dtype='fp16')
         self.sampling_params = SamplingParams(temperature=0.8, top_p=0.95)    
 
     def predict(self, settings):
