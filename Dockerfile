@@ -1,4 +1,4 @@
-FROM vcr.io/nvidia/pytorch:22.12-py3
+FROM runpod/pytorch:2.0.1-py3.10-cuda11.8.0-devel-ubuntu22.04
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN mkdir data
