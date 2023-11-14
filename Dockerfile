@@ -5,7 +5,11 @@ RUN mkdir data
 WORKDIR /data
 
 # Install Python dependencies (Worker Template)
-RUN pip install vllm runpod
+# Yi model support in VLLM requires a source build
+RUN git clone https://github.com/vllm-project/vllm.git
+RUN cd vllm
+pip install -e .  # This may take 5-10 minutes.
+RUN pip install runpod
 
 COPY handler.py /data/handler.py
 COPY schema.py /data/schema.py
