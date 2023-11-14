@@ -1,4 +1,4 @@
-FROM runpod/pytorch:3.10-2.0.0-117
+FROM vcr.io/nvidia/pytorch:22.12-py3
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN mkdir data
