@@ -1,10 +1,11 @@
-FROM nvidia/cuda:12.1.0-devel-ubuntu22.04 AS dev
+FROM nvidia/cuda:12.0.1-base-ubi8
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN mkdir data
 WORKDIR /data
 
 # Install Python dependencies (Worker Template)
+RUN apt update && run install python3 python3-pip
 # Yi model support in VLLM requires a source build
 RUN git clone https://github.com/vllm-project/vllm.git
 WORKDIR vllm
