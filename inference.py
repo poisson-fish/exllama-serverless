@@ -1,5 +1,5 @@
 import torch
-from config import repo_name, model_name
+from config import model_path
 from huggingface_hub import snapshot_download
 import logging, os, glob
 from vllm import LLM, SamplingParams
@@ -7,11 +7,9 @@ from schema import InferenceSettings
 
 class Predictor:
     def setup(self):
-        # Model moved to network storage
-        model_directory = f"/runpod-volume/{model_name}"  
-        # model_directory = f"./models/{model_name}"
+        # Model moved to network storage  
         print("Loading model...")
-        self.llm = LLM(model=model_directory, gpu_memory_utilization=1.0, quantization='awq')
+        self.llm = LLM(trust_remote_code = True, model=model_path, gpu_memory_utilization=1.0, quantization='awq', dtype="float16")
         self.sampling_params = SamplingParams(temperature=0.4, top_p=0.95)    
 
     def predict(self, settings):
