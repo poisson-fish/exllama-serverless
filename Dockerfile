@@ -20,9 +20,8 @@ RUN unzip main.zip -d vllm
 WORKDIR vllm/vllm-main
 ENV MAX_JOBS=16
 RUN pip install -e .
-RUN rm -rf main.zip vllm
 WORKDIR /data
-RUN rm -rf main.zip
+
 
 COPY handler.py /data/handler.py
 COPY schema.py /data/schema.py
