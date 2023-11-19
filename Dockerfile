@@ -15,7 +15,7 @@ RUN unzip main.zip -d vllm
 WORKDIR vllm/vllm-main
 RUN pip install -e .
 WORKDIR /data
-RUN rm -rf main.zip vllm
+RUN rm -rf main.zip
 
 COPY handler.py /data/handler.py
 COPY schema.py /data/schema.py

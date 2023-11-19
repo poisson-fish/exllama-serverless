@@ -1,9 +1,6 @@
 import torch
 from config import model_path
-from huggingface_hub import snapshot_download
-import logging, os, glob
 from vllm import LLM, SamplingParams
-from schema import InferenceSettings
 
 class Predictor:
     def setup(self):
