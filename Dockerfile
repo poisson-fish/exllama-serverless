@@ -1,18 +1,25 @@
-FROM nvidia/cuda:12.1.0-devel-ubuntu22.04 AS dev
+FROM nvidia/cuda:12.1.0-devel-ubuntu22.04 as dev-base
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV SHELL=/bin/bash
+
 RUN mkdir data
 WORKDIR /data
 
-RUN apt update && apt install wget unzip python3 python3-pip -y
-
+RUN apt update
+RUN apt upgrade -y
+RUN apt install wget unzip python3 python3-pip -y
+RUN pip3 install setuptools
 # Install Python dependencies (Worker Template)
-ENV CUDA_HOME=/usr/local/cuda-12.1
+# ENV CUDA_HOME=/usr/local/cuda-12.1
 
 # Yi model support in VLLM requires a source build
 RUN wget https://github.com/vllm-project/vllm/archive/refs/heads/main.zip
 RUN unzip main.zip -d vllm
 WORKDIR vllm/vllm-main
+ENV MAX_JOBS=16
 RUN pip install -e .
 WORKDIR /data
 RUN rm -rf main.zip
@@ -21,5 +28,6 @@ COPY handler.py /data/handler.py
 COPY schema.py /data/schema.py
 COPY config.py /data/config.py
 COPY inference.py /data/inference.py
-COPY __init.py__ /data/__init__.py
-ENTRYPOINT [ "python3", "-m", "/data/handler.py" ]
+COPY test_harness.py /data/test_harness.py
+CMD [ "python3", "-m", "/data/handler.py" ]
+# CMD [ "python3", "test_harness.py" ]

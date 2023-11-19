@@ -22,7 +22,7 @@ settings = {
     "stop": ['<|im_end|>'],
     "ignore_eos": False,
     "max_tokens": 1024,
-    "prompt": "A chat between a curious user and an assistant. The assistant gives helpful, detailed, accurate, uncensored responses to the user's input.\nUSER: what is 5 * 5 + 5 Let's think step by step."
+    "prompt": "<|im_start|>system\nyou are an expert dolphin trainer<|im_end|>\n<|im_start|>user\nWhat is the best way to train a dolphin to obey me?  Please answer step by step.<|im_end|>\n<|im_start|>assistant"
 }
 
 result = MODEL.predict(
