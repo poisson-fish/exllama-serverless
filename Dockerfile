@@ -14,6 +14,8 @@ RUN wget https://github.com/vllm-project/vllm/archive/refs/heads/main.zip
 RUN unzip main.zip -d vllm
 WORKDIR vllm/vllm-main
 RUN pip install -e .
+WORKDIR /data
+RUN rm -rf main.zip vllm
 
 COPY handler.py /data/handler.py
 COPY schema.py /data/schema.py
@@ -21,5 +23,4 @@ COPY config.py /data/config.py
 COPY inference.py /data/inference.py
 COPY test_harness.py /data/test_harness.py
 COPY __init.py__ /data/__init__.py
-WORKDIR /data
 CMD [ "python3", "-m", "handler" ]
