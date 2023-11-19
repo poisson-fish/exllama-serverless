@@ -22,4 +22,4 @@ COPY inference.py /data/inference.py
 COPY test_harness.py /data/test_harness.py
 COPY __init.py__ /data/__init__.py
 WORKDIR /data
-CMD [ "python3", "test_endpoint.py" ]
+CMD [ "python3", "-m", "handler" ]
