@@ -11,7 +11,7 @@ WORKDIR /data
 RUN apt update
 RUN apt upgrade -y
 RUN apt install wget unzip python3 python3-pip -y
-RUN pip3 install setuptools
+RUN pip3 install setuptools runpod
 # Install Python dependencies (Worker Template)
 
 # Yi model support in VLLM requires a source build
