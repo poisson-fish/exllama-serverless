@@ -21,7 +21,7 @@ WORKDIR vllm/vllm-main
 ENV MAX_JOBS=16
 RUN pip install -e .
 WORKDIR /data
-
+RUN rm main.zip
 
 COPY handler.py /data/handler.py
 COPY schema.py /data/schema.py
