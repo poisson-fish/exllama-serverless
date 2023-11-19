@@ -1,12 +1,12 @@
 import torch
-from config import model_path
+from config import model_path, memory_split
 from vllm import LLM, SamplingParams
 
 class Predictor:
     def setup(self):
         # Model moved to network storage  
         print("Loading model...")
-        self.llm = LLM(trust_remote_code = True, model=model_path, gpu_memory_utilization=1.0, quantization='awq', dtype="float16")
+        self.llm = LLM(trust_remote_code = True, model=model_path, gpu_memory_utilization=memory_split, quantization='awq', dtype="float16")
         self.sampling_params = SamplingParams(temperature=0.4, top_p=0.95)    
 
     def predict(self, settings):
