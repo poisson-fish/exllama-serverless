@@ -20,6 +20,7 @@ RUN unzip main.zip -d vllm
 WORKDIR vllm/vllm-main
 ENV MAX_JOBS=16
 RUN pip install -e .
+
 WORKDIR /data
 RUN rm main.zip
 
