@@ -13,7 +13,6 @@ RUN apt upgrade -y
 RUN apt install wget unzip python3 python3-pip -y
 RUN pip3 install setuptools
 # Install Python dependencies (Worker Template)
-# ENV CUDA_HOME=/usr/local/cuda-12.1
 
 # Yi model support in VLLM requires a source build
 RUN wget https://github.com/vllm-project/vllm/archive/refs/heads/main.zip
@@ -28,6 +27,7 @@ COPY handler.py /data/handler.py
 COPY schema.py /data/schema.py
 COPY config.py /data/config.py
 COPY inference.py /data/inference.py
-COPY test_harness.py /data/test_harness.py
+COPY test_endpoint.py /data/test_endpoint.py
+#COPY test_harness.py /data/test_harness.py
 CMD [ "python3", "-m", "handler.py" ]
 # CMD [ "python3", "test_harness.py" ]
