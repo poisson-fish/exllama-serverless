@@ -27,7 +27,6 @@ COPY handler.py /data/handler.py
 COPY schema.py /data/schema.py
 COPY config.py /data/config.py
 COPY inference.py /data/inference.py
-COPY test_endpoint.py /data/test_endpoint.py
 #COPY test_harness.py /data/test_harness.py
 CMD [ "python3", "-m", "handler.py" ]
 # CMD [ "python3", "test_harness.py" ]
