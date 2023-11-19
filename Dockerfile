@@ -22,4 +22,4 @@ COPY schema.py /data/schema.py
 COPY config.py /data/config.py
 COPY inference.py /data/inference.py
 COPY __init.py__ /data/__init__.py
-CMD [ "python3", "-m", "/handler.py" ]
+ENTRYPOINT [ "python3", "-m", "/data/handler.py" ]
